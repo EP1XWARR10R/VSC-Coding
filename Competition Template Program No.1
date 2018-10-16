@@ -1,28 +1,35 @@
 #include "robot-config.h"
 
 vex::competition Competition;
+
+//Varibles
 int isForward;
 
+//Pre-autonomous
 void pre_auton( void ) {
   isForward = true;
     
 }
 
+//Autonomous
 void autonomous( void ) {
     
 }
 
+//Driver Control
 void usercontrol( void ) {
     
-  while (1){
+  while (true){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Drive ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Changes from forward to backwards and backwards to forwards
     if (Controller1.ButtonDown.pressing() && isForward)
-      isForward = false;  
+      isForward = false; 
     else if (Controller1.ButtonDown.pressing() && isForward == false)
       isForward = true;
-
+    
+    //If the robot is going forward
     if (isForward) {
       if (Controller1.Axis2.value() <= 5 && Controller1.Axis2.value() >= -5) 
         RightDrive.stop(brakeType::hold);
@@ -33,7 +40,8 @@ void usercontrol( void ) {
         LeftDrive.stop(brakeType::hold);
       else
         LeftDrive.spin( directionType::fwd, Controller1.Axis3.position(percentUnits::pct), velocityUnits::pct);
-      
+    
+    //if the robot is going backward
     } else {
       if (Controller1.Axis3.value() <= 5 && Controller1.Axis3.value() >= -5)   
         RightDrive.stop(brakeType::hold);
@@ -50,14 +58,17 @@ void usercontrol( void ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
 // Lift ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Lift lift up
     if (Controller1.ButtonR1.pressing()) {
       RightLift.spin(directionType::fwd, 90, velocityUnits::pct);
       LeftLift.spin(directionType::fwd, 90, velocityUnits::pct);
-        
+    
+    //Lower lift down
     } else if (Controller1.ButtonR2.pressing()) {             
       RightLift.spin(directionType::rev, 90, velocityUnits::pct);       
       LeftLift.spin(directionType::rev, 90, velocityUnits::pct);
-        
+    
+    //Brake lift
     } else {
       RightLift.stop(brakeType::hold);
       LeftLift.stop(brakeType::hold);
@@ -68,25 +79,34 @@ void usercontrol( void ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
 // Cap Flipper /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+    //Get the caps rotation
     int CapsRotation = CapFlipper.rotation(rotationUnits::deg);  
+    
+    //Make sure that it does not go over 1080 or under 0
     if (CapsRotation >= 1080)
       CapFlipper.setRotation(CapsRotation -1080, rotationUnits::deg);
     if (CapsRotation <= 0)
       CapFlipper.setRotation(CapsRotation +1080, rotationUnits::deg);
+      
+    //Rotate 180 degrees
     if (Controller1.ButtonUp.pressing() && (CapsRotation >= 270 && CapsRotation <= 610))
       CapFlipper.rotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
     else if (Controller1.ButtonUp.pressing() && (CapsRotation <= 270 || CapsRotation >= 610))
       CapFlipper.rotateTo(540,rotationUnits::deg,75,velocityUnits::pct);
+      
+    // Rotate cap fipper
     else if (Controller1.ButtonL1.pressing())
       CapFlipper.spin(directionType::fwd, 75, velocityUnits::pct);
     else if (Controller1.ButtonL2.pressing())
       CapFlipper.spin(directionType::rev, 75, velocityUnits::pct);
+    
+    // Brake cap flipper
     else
       CapFlipper.stop(brakeType::hold);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
-//// Lift //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Lift to a certain height //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
 //    if (Controller1.ButtonX.pressed()) {
 //      // Lift to this hight
@@ -102,6 +122,7 @@ void usercontrol( void ) {
   }
 }
 
+// Main - don't change
 int main() {
   pre_auton();
     
