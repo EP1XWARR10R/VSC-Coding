@@ -43,7 +43,7 @@ int liftLevel = 0;
     }
 
     //Move lift to given level
-    int moveToLevel(int level) {
+    void moveToLevel(int level) {
         if (level == 0) {
             moveToLevel0();
             liftLevel = 0;
@@ -65,7 +65,8 @@ int liftLevel = 0;
             liftLevel = 4;
             vex::task::sleep(100);
         }        
-    } //end moveToLevel
+    } 
+    //end moveToLevel
 
 //Pre-autonomous
 void pre_auton( void ) {
@@ -146,12 +147,12 @@ void usercontrol( void ) {
       
     //Y - Down one
     if(Controller1.ButtonY.pressing()) {
-        moveToLevel(liftLevel - 1)
+        moveToLevel(liftLevel - 1);
     }    
         
     //A - Up one
     if(Controller1.ButtonA.pressing()) {
-        moveToLevel(liftLevel + 1)
+        moveToLevel(liftLevel + 1);
     }  
         
     //B - All the way down
