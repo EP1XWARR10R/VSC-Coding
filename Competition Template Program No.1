@@ -3,43 +3,43 @@
 vex::competition Competition;
 
 //Varibles
-int isForward = true;
+bool isForward = true;
 int liftLevel = 0;
 
 // Functions
     // Move lift to level 0
-    int moveToLevel0() {
+    void moveToLevel0() {
         RightLift.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
         LeftLift.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
-        return 0;
+        Brain.Screen.print("0");
     }
 
     // Move lift to level 1
-    int moveToLevel1() {
+    void moveToLevel1() {
         RightLift.startRotateTo(200,rotationUnits::deg, 75,velocityUnits::pct);
         LeftLift.startRotateTo(200,rotationUnits::deg, 75,velocityUnits::pct);
-        return 0;
+        Brain.Screen.print("1");
     }
 
     // Move lift to level 2
-    int moveToLevel2() {
+    void moveToLevel2() {
         RightLift.startRotateTo(215,rotationUnits::deg, 75,velocityUnits::pct);
         LeftLift.startRotateTo(215,rotationUnits::deg, 75,velocityUnits::pct);
-        return 0;
+        Brain.Screen.print("2");
     }
 
     // Move lift to level 3
-    int moveToLevel3() {
+    void moveToLevel3() {
         RightLift.startRotateTo(423,rotationUnits::deg, 75,velocityUnits::pct);
         LeftLift.startRotateTo(423,rotationUnits::deg, 75,velocityUnits::pct);
-        return 0;
+        Brain.Screen.print("3");
     }
 
     // Move lift to level 4
-    int moveToLevel4() {
+    void moveToLevel4() {
         RightLift.startRotateTo(790,rotationUnits::deg, 75,velocityUnits::pct);
         LeftLift.startRotateTo(790,rotationUnits::deg, 75,velocityUnits::pct);
-        return 0;
+        Brain.Screen.print("4");
     }
 
     //Move lift to given level
@@ -140,19 +140,22 @@ void usercontrol( void ) {
       
     //Y - Down one
     if(Controller1.ButtonY.pressing()) {
-        if (liftLevel == 0){  
-        } else if (liftLevel == 1){
+        if (liftLevel == 1){
             moveToLevel0();
             liftLevel = 0;
+            vex::task::sleep(100);
         } else if (liftLevel == 2){
             moveToLevel1();
             liftLevel = 1;
+            vex::task::sleep(100);
         } else if (liftLevel == 3){
             moveToLevel2();
             liftLevel = 2;
+            vex::task::sleep(100);
         } else if (liftLevel == 4){
             moveToLevel3();
             liftLevel = 3;
+            vex::task::sleep(100);
         }
     }    
         
@@ -161,16 +164,19 @@ void usercontrol( void ) {
         if (liftLevel == 0) {
             moveToLevel1();
             liftLevel = 1;
+            vex::task::sleep(100);
         } else if (liftLevel == 1) {
             moveToLevel2();
             liftLevel = 2;
+            vex::task::sleep(100);
         } else if (liftLevel == 2) {
             moveToLevel3();
             liftLevel = 3;
+            vex::task::sleep(100);
         } else if (liftLevel == 3) {
             moveToLevel4();
             liftLevel = 4;
-        } else if (liftLevel == 4) { 
+            vex::task::sleep(100);
         }
     }  
         
