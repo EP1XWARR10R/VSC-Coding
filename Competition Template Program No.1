@@ -16,31 +16,31 @@ int liftLevel;
     }
     // Move lift to level 1
     int moveToLevel1() {
-        RightLift.startRotateTo(00,rotationUnits::deg, 200,velocityUnits::pct);
-        LeftLift.startRotateTo(00,rotationUnits::deg, 200,velocityUnits::pct);
+        RightLift.startRotateTo(200,rotationUnits::deg, 75,velocityUnits::pct);
+        LeftLift.startRotateTo(200,rotationUnits::deg, 75,velocityUnits::pct);
         liftLevel = 1;
         return 0;
     }
     // Move lift to level 2
     int moveToLevel2() {
-        RightLift.startRotateTo(00,rotationUnits::deg, 215,velocityUnits::pct);
-        LeftLift.startRotateTo(00,rotationUnits::deg, 215,velocityUnits::pct);
+        RightLift.startRotateTo(215,rotationUnits::deg, 75,velocityUnits::pct);
+        LeftLift.startRotateTo(215,rotationUnits::deg, 75,velocityUnits::pct);
         liftLevel = 2;
         return 0;
     }
 
     // Move lift to level 3
     int moveToLevel3() {
-        RightLift.startRotateTo(00,rotationUnits::deg, 423,velocityUnits::pct);
-        LeftLift.startRotateTo(00,rotationUnits::deg, 423,velocityUnits::pct);
+        RightLift.startRotateTo(423,rotationUnits::deg, 75,velocityUnits::pct);
+        LeftLift.startRotateTo(423,rotationUnits::deg, 75,velocityUnits::pct);
         liftLevel = 3;
         return 0;
     }
 
     // Move lift to level 4
     int moveToLevel4() {
-        RightLift.startRotateTo(00,rotationUnits::deg, 790,velocityUnits::pct);
-        LeftLift.startRotateTo(00,rotationUnits::deg, 790,velocityUnits::pct);
+        RightLift.startRotateTo(790,rotationUnits::deg, 75,velocityUnits::pct);
+        LeftLift.startRotateTo(790,rotationUnits::deg, 75,velocityUnits::pct);
         liftLevel = 4;
         return 0;
     }
