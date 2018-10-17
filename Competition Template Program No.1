@@ -14,18 +14,55 @@ int liftlevel;
         return 0;
     }
     // Move lift to level 1
-
+    int moveToLevel1() {
+        RightLift.startRotateTo(00,rotationUnits::deg, 200,velocityUnits::pct);
+        LeftLift.startRotateTo(00,rotationUnits::deg, 200,velocityUnits::pct);
+        return 0;
+    }
     // Move lift to level 2
+    int moveToLevel2() {
+        RightLift.startRotateTo(00,rotationUnits::deg, 215,velocityUnits::pct);
+        LeftLift.startRotateTo(00,rotationUnits::deg, 215,velocityUnits::pct);
+        return 0;
+    }
 
     // Move lift to level 3
+    int moveToLevel3() {
+        RightLift.startRotateTo(00,rotationUnits::deg, 423,velocityUnits::pct);
+        LeftLift.startRotateTo(00,rotationUnits::deg, 423,velocityUnits::pct);
+        return 0;
+    }
 
     // Move lift to level 4
+    int moveToLevel4() {
+        RightLift.startRotateTo(00,rotationUnits::deg, 790,velocityUnits::pct);
+        LeftLift.startRotateTo(00,rotationUnits::deg, 790,velocityUnits::pct);
+        return 0;
+    }
 
+    //Move lift to given level
+    int moveToLevel(level) {
+        if (level == 0) {
+            moveToLevel0();
+        }
+        else if (level == 1) {
+            moveToLevel1();
+        }
+        else if (level == 2) {
+            moveToLevel2();
+        }
+        else if (level == 3) {
+            moveToLevel3();
+        }
+        else if (level == 4) {
+            moveToLevel4();
+        }        
+    } //end moveToLevel
 
 //Pre-autonomous
 void pre_auton( void ) {
     isForward = true;
-    liftlevel = 0;
+    liftLevel = 0;
 }
 
 //Autonomous
@@ -111,7 +148,16 @@ void usercontrol( void ) {
     }
         
     //A - Up one
-    
+    if (liftLevel == 0) {
+        moveToLevel1();
+    } else if (liftLevel == 1) {
+        moveToLevel2();
+    } else if (liftLevel == 2) {
+        moveToLevel3();
+    } else if (liftLevel == 3) {
+        moveToLevel4();
+    } else if (liftLevel == 4) { 
+    }
     //B - All the way down
     if(Controller1.ButtonB.pressing()) {
         moveToLevel0();
