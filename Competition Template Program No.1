@@ -5,9 +5,26 @@ vex::competition Competition;
 //Varibles
 int isForward;
 
+
+// Functions
+    // Move lift to level 0
+    int moveToLevel0() {
+        RightLift.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
+        LeftLift.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
+        return 0;
+    }
+    // Move lift to level 1
+
+    // Move lift to level 2
+
+    // Move lift to level 3
+
+    // Move lift to level 4
+
+
 //Pre-autonomous
 void pre_auton( void ) {
-  isForward = true;
+    isForward = true;
     
 }
 
@@ -25,33 +42,33 @@ void usercontrol( void ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Changes from forward to backwards and backwards to forwards
     if (Controller1.ButtonDown.pressing() && isForward)
-      isForward = false; 
+        isForward = false; 
     else if (Controller1.ButtonDown.pressing() && isForward == false)
-      isForward = true;
+        isForward = true;
     
     //If the robot is going forward
     if (isForward) {
-      if (Controller1.Axis2.value() <= 5 && Controller1.Axis2.value() >= -5) 
-        RightDrive.stop(brakeType::hold);
-      else
-        RightDrive.spin(directionType::fwd, Controller1.Axis2.position(percentUnits::pct), velocityUnits::pct);
+        if (Controller1.Axis2.value() <= 5 && Controller1.Axis2.value() >= -5) 
+            RightDrive.stop(brakeType::hold);
+        else
+            RightDrive.spin(directionType::fwd, Controller1.Axis2.position(percentUnits::pct), velocityUnits::pct);
       
-      if (Controller1.Axis3.value() <= 5 && Controller1.Axis3.value() >= -5)
-        LeftDrive.stop(brakeType::hold);
-      else
-        LeftDrive.spin( directionType::fwd, Controller1.Axis3.position(percentUnits::pct), velocityUnits::pct);
+        if (Controller1.Axis3.value() <= 5 && Controller1.Axis3.value() >= -5)
+            LeftDrive.stop(brakeType::hold);
+        else
+            LeftDrive.spin( directionType::fwd, Controller1.Axis3.position(percentUnits::pct), velocityUnits::pct);
     
     //if the robot is going backward
     } else {
-      if (Controller1.Axis3.value() <= 5 && Controller1.Axis3.value() >= -5)   
-        RightDrive.stop(brakeType::hold);
-      else
-        RightDrive.spin(directionType::rev, Controller1.Axis3.position(percentUnits::pct), velocityUnits::pct);
+        if (Controller1.Axis3.value() <= 5 && Controller1.Axis3.value() >= -5)   
+            RightDrive.stop(brakeType::hold);
+        else
+            RightDrive.spin(directionType::rev, Controller1.Axis3.position(percentUnits::pct), velocityUnits::pct);
       
-      if (Controller1.Axis2.value() <= 5 && Controller1.Axis2.value() >= -5)
-        LeftDrive.stop(brakeType::hold);
-      else
-        LeftDrive.spin( directionType::rev, Controller1.Axis2.position(percentUnits::pct), velocityUnits::pct);
+        if (Controller1.Axis2.value() <= 5 && Controller1.Axis2.value() >= -5)
+            LeftDrive.stop(brakeType::hold);
+        else
+            LeftDrive.spin( directionType::rev, Controller1.Axis2.position(percentUnits::pct), velocityUnits::pct);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////        
 
@@ -60,20 +77,33 @@ void usercontrol( void ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Lift lift up
     if (Controller1.ButtonR1.pressing()) {
-      RightLift.spin(directionType::fwd, 90, velocityUnits::pct);
-      LeftLift.spin(directionType::fwd, 90, velocityUnits::pct);
+        RightLift.spin(directionType::fwd, 90, velocityUnits::pct);
+        LeftLift.spin(directionType::fwd, 90, velocityUnits::pct);
     
     //Lower lift down
     } else if (Controller1.ButtonR2.pressing()) {             
-      RightLift.spin(directionType::rev, 90, velocityUnits::pct);       
-      LeftLift.spin(directionType::rev, 90, velocityUnits::pct);
+        RightLift.spin(directionType::rev, 90, velocityUnits::pct);       
+        LeftLift.spin(directionType::rev, 90, velocityUnits::pct);
     
     //Brake lift
     } else {
-      RightLift.stop(brakeType::hold);
-      LeftLift.stop(brakeType::hold);
+        RightLift.stop(brakeType::hold);
+        LeftLift.stop(brakeType::hold);
         
     }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+// Button lift /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //X - All the way up
+      
+    //Y - Down one
+      
+    //A - Up one
+      
+    //B - All the way down
+    if(Controller1.ButtonB.pressing()) {
+        moveToLevel0();
+    }  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
@@ -84,37 +114,25 @@ void usercontrol( void ) {
     
     //Make sure that it does not go over 1080 or under 0
     if (CapsRotation >= 1080)
-      CapFlipper.setRotation(CapsRotation -1080, rotationUnits::deg);
+        CapFlipper.setRotation(CapsRotation -1080, rotationUnits::deg);
     if (CapsRotation <= 0)
-      CapFlipper.setRotation(CapsRotation +1080, rotationUnits::deg);
+        CapFlipper.setRotation(CapsRotation +1080, rotationUnits::deg);
       
     //Rotate 180 degrees
     if (Controller1.ButtonUp.pressing() && (CapsRotation >= 270 && CapsRotation <= 610))
-      CapFlipper.rotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
+        CapFlipper.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
     else if (Controller1.ButtonUp.pressing() && (CapsRotation <= 270 || CapsRotation >= 610))
-      CapFlipper.rotateTo(540,rotationUnits::deg,75,velocityUnits::pct);
+        CapFlipper.startRotateTo(540,rotationUnits::deg,75,velocityUnits::pct);
       
     // Rotate cap fipper
     else if (Controller1.ButtonL1.pressing())
-      CapFlipper.spin(directionType::fwd, 75, velocityUnits::pct);
+        CapFlipper.spin(directionType::fwd, 75, velocityUnits::pct);
     else if (Controller1.ButtonL2.pressing())
-      CapFlipper.spin(directionType::rev, 75, velocityUnits::pct);
+        CapFlipper.spin(directionType::rev, 75, velocityUnits::pct);
     
     // Brake cap flipper
     else
-      CapFlipper.stop(brakeType::hold);
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
-//// Lift to a certain height //////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
-//    if (Controller1.ButtonX.pressed()) {
-//      // Lift to this hight
-//    }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        CapFlipper.stop(brakeType::hold);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,13 +142,13 @@ void usercontrol( void ) {
 
 // Main - don't change
 int main() {
-  pre_auton();
+    pre_auton();
     
-  Competition.autonomous( autonomous );
-  Competition.drivercontrol( usercontrol );
+    Competition.autonomous( autonomous );
+    Competition.drivercontrol( usercontrol );
                       
-  while(1) {
-    vex::task::sleep(100); //Sleep the task for a short amount of time to prevent wasted resources.
-  }    
+    while(1) {
+        vex::task::sleep(100); //Sleep the task for a short amount of time to prevent wasted resources.
+    }    
        
 }
