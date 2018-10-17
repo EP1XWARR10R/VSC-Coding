@@ -4,25 +4,28 @@ vex::competition Competition;
 
 //Varibles
 int isForward;
-int liftlevel;
+int liftLevel;
 
 // Functions
     // Move lift to level 0
     int moveToLevel0() {
         RightLift.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
         LeftLift.startRotateTo(00,rotationUnits::deg,75,velocityUnits::pct);
+        liftLevel = 0;
         return 0;
     }
     // Move lift to level 1
     int moveToLevel1() {
         RightLift.startRotateTo(00,rotationUnits::deg, 200,velocityUnits::pct);
         LeftLift.startRotateTo(00,rotationUnits::deg, 200,velocityUnits::pct);
+        liftLevel = 1;
         return 0;
     }
     // Move lift to level 2
     int moveToLevel2() {
         RightLift.startRotateTo(00,rotationUnits::deg, 215,velocityUnits::pct);
         LeftLift.startRotateTo(00,rotationUnits::deg, 215,velocityUnits::pct);
+        liftLevel = 2;
         return 0;
     }
 
@@ -30,6 +33,7 @@ int liftlevel;
     int moveToLevel3() {
         RightLift.startRotateTo(00,rotationUnits::deg, 423,velocityUnits::pct);
         LeftLift.startRotateTo(00,rotationUnits::deg, 423,velocityUnits::pct);
+        liftLevel = 3;
         return 0;
     }
 
@@ -37,11 +41,12 @@ int liftlevel;
     int moveToLevel4() {
         RightLift.startRotateTo(00,rotationUnits::deg, 790,velocityUnits::pct);
         LeftLift.startRotateTo(00,rotationUnits::deg, 790,velocityUnits::pct);
+        liftLevel = 4;
         return 0;
     }
 
     //Move lift to given level
-    int moveToLevel(level) {
+/*    int moveToLevel(int level) {
         if (level == 0) {
             moveToLevel0();
         }
@@ -58,7 +63,7 @@ int liftlevel;
             moveToLevel4();
         }        
     } //end moveToLevel
-
+*/
 //Pre-autonomous
 void pre_auton( void ) {
     isForward = true;
@@ -136,15 +141,15 @@ void usercontrol( void ) {
         moveToLevel4();
     }  
     //Y - Down one
-    if (liftlevel = 0){  
-    } else if (liftlevel = 1){
-        movetolevel0();
-    } else if (liftlevel = 2){
-        movetolevel1();
-    } else if (liftlevel = 3){
-        movetolevel2();
-    } else if (liftlevel = 4){
-        movetolevel3();
+    if (liftLevel == 0){  
+    } else if (liftLevel == 1){
+        moveToLevel0();
+    } else if (liftLevel == 2){
+        moveToLevel1();
+    } else if (liftLevel == 3){
+        moveToLevel2();
+    } else if (liftLevel == 4){
+        moveToLevel3();
     }
         
     //A - Up one
