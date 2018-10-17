@@ -43,20 +43,30 @@ int liftLevel = 0;
     }
 
     //Move lift to given level
-/*    int moveToLevel(int level) {
+    int moveToLevel(int level) {
         if (level == 0) {
             moveToLevel0();
+            liftLevel = 0;
+            vex::task::sleep(100);
         } else if (level == 1) {
             moveToLevel1();
+            liftLevel = 1;
+            vex::task::sleep(100);
         } else if (level == 2) {
             moveToLevel2();
+            liftLevel = 2;
+            vex::task::sleep(100);
         } else if (level == 3) {
             moveToLevel3();
+            liftLevel = 3;
+            vex::task::sleep(100);
         } else if (level == 4) {
             moveToLevel4();
+            liftLevel = 4;
+            vex::task::sleep(100);
         }        
     } //end moveToLevel
-*/
+
 //Pre-autonomous
 void pre_auton( void ) {
     isForward = true;
@@ -136,44 +146,12 @@ void usercontrol( void ) {
       
     //Y - Down one
     if(Controller1.ButtonY.pressing()) {
-        if (liftLevel == 1){
-            moveToLevel0();
-            liftLevel = 0;
-            vex::task::sleep(100);
-        } else if (liftLevel == 2){
-            moveToLevel1();
-            liftLevel = 1;
-            vex::task::sleep(100);
-        } else if (liftLevel == 3){
-            moveToLevel2();
-            liftLevel = 2;
-            vex::task::sleep(100);
-        } else if (liftLevel == 4){
-            moveToLevel3();
-            liftLevel = 3;
-            vex::task::sleep(100);
-        }
+        moveToLevel(liftLevel - 1)
     }    
         
     //A - Up one
     if(Controller1.ButtonA.pressing()) {
-        if (liftLevel == 0) {
-            moveToLevel1();
-            liftLevel = 1;
-            vex::task::sleep(100);
-        } else if (liftLevel == 1) {
-            moveToLevel2();
-            liftLevel = 2;
-            vex::task::sleep(100);
-        } else if (liftLevel == 2) {
-            moveToLevel3();
-            liftLevel = 3;
-            vex::task::sleep(100);
-        } else if (liftLevel == 3) {
-            moveToLevel4();
-            liftLevel = 4;
-            vex::task::sleep(100);
-        }
+        moveToLevel(liftLevel + 1)
     }  
         
     //B - All the way down
