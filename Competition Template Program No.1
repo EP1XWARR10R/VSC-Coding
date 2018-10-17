@@ -4,7 +4,7 @@ vex::competition Competition;
 
 //Varibles
 int isForward;
-
+int liftlevel;
 
 // Functions
     // Move lift to level 0
@@ -25,7 +25,7 @@ int isForward;
 //Pre-autonomous
 void pre_auton( void ) {
     isForward = true;
-    
+    liftlevel = 0;
 }
 
 //Autonomous
@@ -95,11 +95,23 @@ void usercontrol( void ) {
 // Button lift /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //X - All the way up
-      
+    if(Controller1.ButtonX.pressing()) {
+        moveToLevel4();
+    }  
     //Y - Down one
-      
+    if (liftlevel = 0){  
+    } else if (liftlevel = 1){
+        movetolevel0();
+    } else if (liftlevel = 2){
+        movetolevel1();
+    } else if (liftlevel = 3){
+        movetolevel2();
+    } else if (liftlevel = 4){
+        movetolevel3();
+    }
+        
     //A - Up one
-      
+    
     //B - All the way down
     if(Controller1.ButtonB.pressing()) {
         moveToLevel0();
