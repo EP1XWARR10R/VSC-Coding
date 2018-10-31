@@ -1,0 +1,34 @@
+void DriveDistance(double numInches){
+        
+        double inch = 475/23;
+        
+        LeftDrive.rotateFor(inch*numInches,rotationUnits::deg,100,velocityUnits::pct);
+    
+        RightDrive.rotateFor(inch*numInches,rotationUnits::deg,100,velocityUnits::pct);
+    
+    }
+
+void LiftSlightly(double UserInput){
+    
+    double inch = 475/23;
+    
+    LeftLift.rotateTo(inch*UserInput,rotationUnits::deg,100,velocityUnits::pct);
+    
+    RightLift.rotateTo(inch*UserInput,rotationUnits::deg,100,velocityUnits::pct);
+    
+}
+
+int main() {
+    
+    int tile = 23;
+    DriveDistance(tile);
+    task::sleep(100);
+    DriveDistance(tile);
+    task::sleep(100);
+    LiftSlightly(tile);
+    task::sleep(100);
+    DriveDistance(tile);
+    
+    
+    
+}
