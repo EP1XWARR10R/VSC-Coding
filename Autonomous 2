@@ -1,34 +1,66 @@
-void DriveDistance(double numInches){
-        
-        double inch = 475/23;
-        
-        LeftDrive.rotateFor(inch*numInches,rotationUnits::deg,100,velocityUnits::pct);
-    
-        RightDrive.rotateFor(inch*numInches,rotationUnits::deg,100,velocityUnits::pct);
-    
+#include "robot-config.h"
+          
+void DriveForwardForDistance(int numInches) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Forward");
+        LeftDrive .startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive.startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        while (LeftLift.isSpinning() || RightLift.isSpinning()) {}
     }
 
-void LiftSlightly(double UserInput){
+    void DriveBackwardForDistance(int numInches) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Backward");
+        LeftDrive .startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive.startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        while (LeftLift.isSpinning() || RightLift.isSpinning()) {}
+    }
     
-    double inch = 475/23;
-    
-    LeftLift.rotateTo(inch*UserInput,rotationUnits::deg,100,velocityUnits::pct);
-    
-    RightLift.rotateTo(inch*UserInput,rotationUnits::deg,100,velocityUnits::pct);
-    
-}
+    void VeerRightForDistance(int numInchesR, int numInchesL, int right, int left) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Right");
+        LeftDrive .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        while (LeftLift.isSpinning() || RightLift.isSpinning()) {}
+    }
+
+    void VeerLeftForDistance (int numInchesL, int numInchesR, int left, int right) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Left");
+        LeftDrive .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        while (LeftLift.isSpinning() || RightLift.isSpinning()) {}
+    }
 
 int main() {
     
     int tile = 23;
-    DriveDistance(tile);
-    task::sleep(100);
-    DriveDistance(tile);
-    task::sleep(100);
-    LiftSlightly(tile);
-    task::sleep(100);
-    DriveDistance(tile);
     
     
+    DriveForwardForDistance(tile);
     
+    task::sleep(100);
+    
+    DriveForwardForDistance(tile);
+    
+    task::sleep(100);
+    
+    DriveForwardForDistance(tile);
+    
+    task::sleep(100);
+    
+    DriveBackwardForDistance(tile);
+    
+    task::sleep(100);
+    
+    VeerRightForDistance(tile);
+    
+    task::sleep(100);
+    
+    DriveForwardForDistance(tile/4);
+    
+    task::sleep(100);
+    
+    VeerLeftForDistance(tile/2);
+     
 }
