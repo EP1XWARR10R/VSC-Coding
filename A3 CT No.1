@@ -1,0 +1,308 @@
+#include "robot-config.h"
+
+vex::competition Competition;
+
+//Varibles
+bool isForward = true;
+int  liftLevel = 0;
+bool notFlywheelSpinning = true;
+bool notIntakeSpinning   = true;
+double inch = 21;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Functions ///////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+    void DriveForwardForDistance(double numInches) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Forward");
+        LeftDrive .startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive.startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    }
+
+    void DriveBackwardForDistance(double numInches) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Backward");
+        LeftDrive .startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive.startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    }
+    
+    void VeerRightForDistance(double numInchesR, double numInchesL, double right, double left) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Right");
+        LeftDrive .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    }
+
+    void VeerLeftForDistance (double numInchesL, double numInchesR, double left, double right) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Left");
+        LeftDrive .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    }
+
+    void LiftLiftForDistance (double numInches, int speed) {
+        RightLift.startRotateFor(numInches, rotationUnits::deg, speed, velocityUnits::pct);
+        LeftLift .startRotateFor(numInches, rotationUnits::deg, speed, velocityUnits::pct);
+        while(LeftLift.isSpinning() || RightLift.isSpinning()) {}
+    }
+    
+    void TurnFlywheelOn() {
+        Flywheel.spin(directionType::rev, 100, velocityUnits::pct);
+        Intake.spin(directionType::rev, 100, velocityUnits::pct);
+        notFlywheelSpinning = false;
+    }
+
+    void TurnFlywheelOff() {
+        Flywheel.stop();
+        Intake.stop();
+        notFlywheelSpinning = true;
+    }
+
+    void Fire() {
+        Trigger.rotateFor(800, rotationUnits::deg, 100, velocityUnits::pct);
+    }
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Move lift to level 0
+    void moveToLevel0() {
+        RightLift.startRotateTo(00, rotationUnits::deg, 75, velocityUnits::pct);
+        LeftLift .startRotateTo(00, rotationUnits::deg, 75, velocityUnits::pct);
+    }
+
+    // Move lift to level 1
+    void moveToLevel1() {
+        RightLift.startRotateTo(200, rotationUnits::deg, 75, velocityUnits::pct);
+        LeftLift .startRotateTo(200, rotationUnits::deg, 75, velocityUnits::pct);
+    }
+
+    // Move lift to level 2
+    void moveToLevel2() {
+        RightLift.startRotateTo(215, rotationUnits::deg, 75, velocityUnits::pct);
+        LeftLift .startRotateTo(215, rotationUnits::deg, 75, velocityUnits::pct);
+    }
+
+    // Move lift to level 3
+    void moveToLevel3() {
+        RightLift.startRotateTo(423, rotationUnits::deg, 75, velocityUnits::pct);
+        LeftLift .startRotateTo(423, rotationUnits::deg, 75, velocityUnits::pct);
+    }
+
+    // Move lift to level 4
+    void moveToLevel4() {
+        RightLift.startRotateTo(790, rotationUnits::deg, 75, velocityUnits::pct);
+        LeftLift .startRotateTo(790, rotationUnits::deg, 75, velocityUnits::pct);
+    }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Move lift to given level
+    void moveToLevel(int level) {
+        switch (level) {
+            case 0: moveToLevel0(); break;
+            case 1: moveToLevel1(); break;
+            case 2: moveToLevel2(); break;
+            case 3: moveToLevel3(); break;
+            case 4: moveToLevel4(); break;
+           default:                 break;
+        }
+        while(LeftLift.isSpinning() || RightLift.isSpinning()){}
+        liftLevel = level;
+        Brain.Screen.print(level);
+    } 
+    //end moveToLevel
+
+//Pre-autonomous
+void pre_auton( void ) {
+    isForward = true;
+    liftLevel = 0;
+    
+    Intake    .setStopping(brakeType::coast); 
+    Trigger   .setStopping(brakeType::coast); 
+    Flywheel  .setStopping(brakeType::coast);
+    CapFlipper.setStopping(brakeType::hold);
+    
+    LeftDrive .setStopping(brakeType::brake);
+    RightDrive.setStopping(brakeType::brake);
+    LeftLift  .setStopping(brakeType::hold);
+    RightLift .setStopping(brakeType::hold);
+}
+
+//Autonomous
+void autonomous( void ) {
+    LeftDrive .setStopping(brakeType::coast);
+    RightDrive.setStopping(brakeType::coast);
+    
+    //TurnFlywheelOn();
+    
+    LiftLiftForDistance(700, 100);   ////////////////
+    
+    LiftLiftForDistance(-700, 100);  ////////////////
+      
+    DriveForwardForDistance(90);
+    
+    LeftDrive.startRotateFor(250, rotationUnits::deg, 100, velocityUnits::pct);
+    RightDrive.startRotateFor(-150, rotationUnits::deg, 100, velocityUnits::pct);
+    while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    
+    LeftDrive.startRotateFor(600, rotationUnits::deg, 100, velocityUnits::pct);
+    while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    
+    LiftLiftForDistance(-50, 50);
+    
+    DriveForwardForDistance(30);
+    
+    CapFlipper.rotateFor(540, rotationUnits::deg, 75, velocityUnits::pct);
+    
+    DriveBackwardForDistance(20);
+    
+    LeftDrive.startRotateFor(550, rotationUnits::deg, 100, velocityUnits::pct);
+    RightDrive.startRotateFor(-550, rotationUnits::deg, 100, velocityUnits::pct);
+    while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+   
+    DriveBackwardForDistance(50);
+    
+    LeftDrive.startRotateFor(-250, rotationUnits::deg, 100, velocityUnits::pct);
+    RightDrive.startRotateFor(250, rotationUnits::deg, 100, velocityUnits::pct);
+    while (LeftDrive.isSpinning() || RightDrive.isSpinning()) {}
+    
+    DriveForwardForDistance(20);
+    DriveBackwardForDistance(100);
+}
+
+//Driver Control
+void usercontrol( void ) {
+  while (true){
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Drive ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Changes from forward to backwards and backwards to forwards
+    if (Controller1.ButtonL1.pressing())
+        isForward = true; 
+    else if (Controller1.ButtonL2.pressing())
+        isForward = false;
+    
+    //If the robot is going forward
+    if (isForward) {
+            RightDrive.spin(directionType::fwd, (Controller1.Axis2.position(percentUnits::pct)), velocityUnits::pct);
+            LeftDrive .spin(directionType::fwd, (Controller1.Axis3.position(percentUnits::pct)), velocityUnits::pct);
+    
+    //if the robot is going backward
+    } else {
+            RightDrive.spin(directionType::rev, (Controller1.Axis3.position(percentUnits::pct)), velocityUnits::pct);
+            LeftDrive .spin(directionType::rev, (Controller1.Axis2.position(percentUnits::pct)), velocityUnits::pct);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+// Flywheel ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //if (notIntakeSpinning && Controller1.ButtonRight.pressing()){
+    //    Intake.spin(directionType::fwd, 50, velocityUnits::pct);
+    //    vex::task::sleep(200);
+    //    notIntakeSpinning = false;
+        
+    //} else if (Controller1.ButtonRight.pressing()) {
+    //    Intake.stop();
+    //    vex::task::sleep(200);
+    //    notIntakeSpinning = true;
+    //}
+      
+    if (Controller1.ButtonDown.pressing())
+        Fire();
+      
+    if (notFlywheelSpinning && Controller1.ButtonLeft.pressing()){
+        Flywheel.spin(directionType::rev, 100, velocityUnits::pct);
+        Intake.spin(directionType::rev, 100, velocityUnits::pct);
+        vex::task::sleep(200);
+        notFlywheelSpinning = false;
+    } else if (Controller1.ButtonLeft.pressing()) {
+        Flywheel.stop();
+        Intake.stop();
+        vex::task::sleep(200);
+        notFlywheelSpinning = true;
+    }
+         
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+// Lift ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Lift lift up
+    if (Controller1.ButtonR1.pressing()) {
+        RightLift.spin(directionType::fwd, 60, velocityUnits::pct);
+        LeftLift .spin(directionType::fwd, 60, velocityUnits::pct);
+        
+    //Lower lift down
+    } else if (Controller1.ButtonR2.pressing()) {             
+        RightLift.spin(directionType::rev, 60, velocityUnits::pct);       
+        LeftLift .spin(directionType::rev, 60, velocityUnits::pct);
+        
+    //Brake lift
+    } else {
+        RightLift.stop(brakeType::hold);
+        LeftLift .stop(brakeType::hold);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+// Button lift /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //X - All the way up
+    if(Controller1.ButtonX.pressing())
+        moveToLevel(0);
+      
+    //Y - Down one
+    if(Controller1.ButtonY.pressing())
+        moveToLevel(liftLevel - 1);    
+        
+    //A - Up one
+    if(Controller1.ButtonA.pressing())
+        moveToLevel(liftLevel + 1);
+        
+    //B - All the way down
+    if(Controller1.ButtonB.pressing())
+        moveToLevel(0);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+// Cap Flipper /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+    //Get the caps rotation
+    int CapsRotation = CapFlipper.rotation(rotationUnits::deg);  
+    
+    //Make sure that it does not go over 1080 or under 0
+    if (CapsRotation >= 1080)
+        CapFlipper.setRotation(CapsRotation -1080, rotationUnits::deg);
+    if (CapsRotation <= 0)
+        CapFlipper.setRotation(CapsRotation +1080, rotationUnits::deg);
+      
+    //Rotate 180 degrees
+    if      (Controller1.ButtonUp.pressing() && (CapsRotation >= 270 && CapsRotation <= 610))
+        CapFlipper.rotateTo(00,  rotationUnits::deg, 75, velocityUnits::pct);
+    else if (Controller1.ButtonUp.pressing() && (CapsRotation <= 270 || CapsRotation >= 610))
+        CapFlipper.rotateTo(540, rotationUnits::deg, 75, velocityUnits::pct);
+    
+    // Brake cap flipper
+    else
+        CapFlipper.stop(brakeType::hold);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    vex::task::sleep(20); //Sleep the task for a short amount of time to prevent wasted resources. 
+  }
+}
+
+// Main - don't change
+int main() {
+    pre_auton();
+    
+    Competition.autonomous(autonomous);
+    Competition.drivercontrol(usercontrol);
+                      
+    while(1) {
+        vex::task::sleep(100); //Sleep the task for a short amount of time to prevent wasted resources.
+    }    
+       
+}
