@@ -1,0 +1,120 @@
+#include "robot-config.h"
+
+double inch = 475/23;
+          
+void DriveForwardForDistance(int numInches) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Forward");
+        LeftDrive1 .startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive1.startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive2.startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || RightDrive2.isSpinning() || LeftDrive2.isSpinning()) {}
+    }
+
+    void DriveBackwardForDistance(int numInches) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Backward");
+        LeftDrive1 .startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive1.startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive2.startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || RightDrive2.isSpinning() || LeftDrive2.isSpinning()) {}
+    }
+    
+    void VeerRightForDistance(double numInchesR, double numInchesL, double right, double left) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Right");
+        LeftDrive1 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive1.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive2.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || RightDrive2.isSpinning() || LeftDrive2.isSpinning()) {}
+    }
+
+    void VeerLeftForDistance (double numInchesL, double numInchesR, double left, double right) {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Left");
+        LeftDrive1 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive1.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive2.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || RightDrive2.isSpinning() || LeftDrive2.isSpinning()) {}
+    }
+
+    void Flip() {
+       //Get the caps rotation
+       int CapsRotation = CapFlipper.rotation(rotationUnits::deg);  
+
+       //Make sure that it does not go over 1080 or under 0
+       /*if (CapsRotation >= 1080)
+           CapFlipper.setRotation(CapsRotation -1080, rotationUnits::deg);
+       if (CapsRotation <= 0)
+           CapFlipper.setRotation(CapsRotation +1080, rotationUnits::deg);*/
+
+       //Rotate 180 degrees
+       if      (CapsRotation >= 270 && CapsRotation <= 610)
+           CapFlipper.rotateTo(00,  rotationUnits::deg, 75, velocityUnits::pct);
+       else if (CapsRotation <= 270 || CapsRotation >= 610)
+           CapFlipper.rotateTo(540, rotationUnits::deg, 75, velocityUnits::pct);
+   }
+
+    void TurnAround () {
+        Brain.Screen.newLine();
+        Brain.Screen.print("Turn Around");
+        LeftDrive1.startRotateFor(90,rotationUnits::deg,25,velocityUnits::pct);
+        RightDrive1.startRotateFor(90,rotationUnits::deg,50,velocityUnits::pct);
+        LeftDrive2.startRotateFor(90,rotationUnits::deg,25,velocityUnits::pct);
+        RightDrive2.startRotateFor(90,rotationUnits::deg,50,velocityUnits::pct);
+        while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || RightDrive2.isSpinning() || LeftDrive2.isSpinning()) {}
+    }
+
+int main() {
+    
+    //Starting from the top red square
+    
+    DriveBackwardForDistance(23*4);
+    
+    VeerLeftForDistance(23/2, 23*2, 25, 100);
+    
+    Flip();
+    
+    DriveForwardForDistance(23/2);
+    
+    VeerRightForDistance(23*2, 23, 100, 50);
+    
+    DriveBackwardForDistance(23*2);
+    
+    VeerLeftForDistance(23*2, 23*4, 50, 100);
+    
+    DriveBackwardForDistance(23*1.44);
+    
+    VeerLeftForDistance(23*2, 23*4, 50, 100);
+    
+    VeerRightForDistance(23*4, 23*2, 100, 50);
+    
+    DriveForwardForDistance(23*2);
+    
+    DriveBackwardForDistance(23*2);
+    
+    Flip();
+    
+    DriveForwardForDistance(23*2);
+    
+    VeerLeftForDistance(23, 23*2, 50, 100);
+    
+    DriveBackwardForDistance(23*2);
+    
+    VeerLeftForDistance(23, 23*2, 50, 100);
+    
+    DriveBackwardForDistance(23*2);
+    
+    DriveForwardForDistance(23*2);
+    
+    VeerRightForDistance(23*4, 23*2, 100, 50);
+    
+    DriveBackwardForDistance(23*2);
+    
+    Flip();
+  
+}
