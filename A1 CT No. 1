@@ -7,7 +7,9 @@ bool isForward = true;
 int  liftLevel = 0;
 bool notFlywheelSpinning = true;
 bool notIntakeSpinning   = true;
-double inch = 35;
+
+double GearingRatio = 0.66;          //123.9 / 188 = 0.66
+
 double driveSpeed = 1.00;
 double liftSpeed = 1.00;
 bool lifted = false;
@@ -18,40 +20,40 @@ bool lifted = false;
     void DriveForwardForDistance(double numInches) {
         Brain.Screen.newLine();
         Brain.Screen.print("Forward");
-        LeftDrive1 .startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
-        RightDrive1.startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
-        LeftDrive2 .startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
-        RightDrive2.startRotateFor(inch * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        LeftDrive1 .startRotateFor(GearingRatio * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive1.startRotateFor(GearingRatio * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(GearingRatio * numInches, rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive2.startRotateFor(GearingRatio * numInches, rotationUnits::deg, 100, velocityUnits::pct);
         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || LeftDrive2.isSpinning() || RightDrive2.isSpinning()) {}
     }
 
     void DriveBackwardForDistance(double numInches) {
         Brain.Screen.newLine();
         Brain.Screen.print("Backward");
-        LeftDrive1 .startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
-        RightDrive1.startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
-        LeftDrive2 .startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
-        RightDrive2.startRotateFor(-(inch * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        LeftDrive1 .startRotateFor(-(GearingRatio * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive1.startRotateFor(-(GearingRatio * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(-(GearingRatio * numInches), rotationUnits::deg, 100, velocityUnits::pct);
+        RightDrive2.startRotateFor(-(GearingRatio * numInches), rotationUnits::deg, 100, velocityUnits::pct);
         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || LeftDrive2.isSpinning() || RightDrive2.isSpinning()) {}
     }
     
     void VeerRightForDistance(double numInchesR, double numInchesL, double right, double left) {
         Brain.Screen.newLine();
         Brain.Screen.print("Right");
-        LeftDrive1 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
-        RightDrive1.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
-        LeftDrive2 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
-        RightDrive2.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        LeftDrive1 .startRotateFor(GearingRatio * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive1.startRotateFor(GearingRatio * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(GearingRatio * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive2.startRotateFor(GearingRatio * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || LeftDrive2.isSpinning() || RightDrive2.isSpinning()) {}
     }
 
     void VeerLeftForDistance (double numInchesL, double numInchesR, double left, double right) {
         Brain.Screen.newLine();
         Brain.Screen.print("Left");
-        LeftDrive1 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
-        RightDrive1.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
-        LeftDrive2 .startRotateFor(inch * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
-        RightDrive2.startRotateFor(inch * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        LeftDrive1 .startRotateFor(GearingRatio * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive1.startRotateFor(GearingRatio * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
+        LeftDrive2 .startRotateFor(GearingRatio * numInchesL, rotationUnits::deg, left,  velocityUnits::pct);
+        RightDrive2.startRotateFor(GearingRatio * numInchesR, rotationUnits::deg, right, velocityUnits::pct);
         while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || LeftDrive2.isSpinning() || RightDrive2.isSpinning()) {}
     }
 
@@ -87,6 +89,24 @@ bool lifted = false;
             CapFlipper.rotateTo(00,  rotationUnits::deg, 75, velocityUnits::pct);
         else if (CapsRotation <= 270 || CapsRotation >= 610)
             CapFlipper.rotateTo(540, rotationUnits::deg, 75, velocityUnits::pct);
+        
+    }
+
+    void flipReverse() {
+        //Get the caps rotation
+        int CapsRotation = CapFlipper.rotation(rotationUnits::deg);  
+
+        //Make sure that it does not go over 1080 or under 0
+        if (CapsRotation >= 1080)
+            CapFlipper.setRotation(CapsRotation -1080, rotationUnits::deg);
+        if (CapsRotation <= 0)
+            CapFlipper.setRotation(CapsRotation +1080, rotationUnits::deg);
+
+        //Rotate 180 degrees
+        if      (CapsRotation >= 270 && CapsRotation <= 610)
+            CapFlipper.rotateTo(00,  rotationUnits::deg, -75, velocityUnits::pct);
+        else if (CapsRotation <= 270 || CapsRotation >= 610)
+            CapFlipper.rotateTo(540, rotationUnits::deg, -75, velocityUnits::pct);
     }
     
     /*void TurnFlywheelOn() {
@@ -161,6 +181,9 @@ void pre_auton( void ) {
     isForward = true;
     liftLevel = 0;
     
+    CapFlipper.setTimeout(1,timeUnits::sec);
+    RearCapFlipper.setTimeout(1,timeUnits::sec);
+    
     /*Intake    .setStopping(brakeType::coast); 
     Trigger   .setStopping(brakeType::coast); 
     Flywheel  .setStopping(brakeType::coast);*/
@@ -176,42 +199,69 @@ void pre_auton( void ) {
 
 //Autonomous
 void autonomous( void ) {
-    LeftDrive1 .setStopping(brakeType::coast);
-    RightDrive1.setStopping(brakeType::coast);
-    LeftDrive2 .setStopping(brakeType::coast);
-    RightDrive2.setStopping(brakeType::coast);
+    Brain.Screen.newLine();
+    Brain.Screen.print("Forward");
+    LeftDrive1 .startRotateFor(GearingRatio * 250, rotationUnits::deg, 70, velocityUnits::pct);
+    RightDrive1.startRotateFor(GearingRatio * 250, rotationUnits::deg, 70, velocityUnits::pct);
+    LeftDrive2 .startRotateFor(GearingRatio * 250, rotationUnits::deg, 70, velocityUnits::pct);
+    RightDrive2.startRotateFor(GearingRatio * 250, rotationUnits::deg, 70, velocityUnits::pct);
+    while (LeftDrive1.isSpinning() || RightDrive1.isSpinning() || LeftDrive2.isSpinning() || RightDrive2.isSpinning()) {}
     
-    DriveForwardForDistance(20);
+    LiftLiftForDistance(250, 100);
     
-    LiftLiftForDistance(700, 100);
+    LiftLiftForDistance(-250, 100);
     
-    LiftLiftForDistance(-700, 100);
+    LeftDrive1 .setTimeout(2, timeUnits::sec);
+    RightDrive1.setTimeout(2, timeUnits::sec);
+    LeftDrive2 .setTimeout(2, timeUnits::sec);
+    RightDrive2.setTimeout(2, timeUnits::sec);
+    DriveBackwardForDistance(3600);
     
-    DriveBackwardForDistance(195);
+    LeftDrive1 .setTimeout(4, timeUnits::sec);
+    RightDrive1.setTimeout(4, timeUnits::sec);
+    LeftDrive2 .setTimeout(4, timeUnits::sec);
+    RightDrive2.setTimeout(4, timeUnits::sec);
     
-    DriveForwardForDistance(20);
+//    LeftLift .setTimeout(200, timeUnits::msec);
+//    RightLift.setTimeout(200, timeUnits::msec);
+    LiftLiftForDistance(-50, 100);
+//    LeftLift .setTimeout(2, timeUnits::sec);
+//    RightLift.setTimeout(2, timeUnits::sec);
+    
+    DriveForwardForDistance(500);
     
     RightDrive1.startRotateFor(250, rotationUnits::deg, 100, velocityUnits::pct);
     RightDrive2.startRotateFor(250, rotationUnits::deg, 100, velocityUnits::pct);
+    LeftDrive1.startRotateFor(-250, rotationUnits::deg, -100, velocityUnits::pct);
+    LeftDrive2.startRotateFor(-250, rotationUnits::deg, -100, velocityUnits::pct);
     while (RightDrive1.isSpinning() || RightDrive2.isSpinning()) {}
     
-    DriveForwardForDistance(40);
+    DriveForwardForDistance(1450);
     
-    LeftDrive1.startRotateFor(240, rotationUnits::deg, 100, velocityUnits::pct);
-    LeftDrive2.startRotateFor(240, rotationUnits::deg, 100, velocityUnits::pct);
-    while (LeftDrive1.isSpinning() || LeftDrive2.isSpinning()) {}
+    CapFlipper.rotateTo(540, rotationUnits::deg, -75, velocityUnits::pct);
     
-    DriveForwardForDistance(60);
+    RightDrive1.startRotateFor(1200, rotationUnits::deg, 100, velocityUnits::pct);
+    RightDrive2.startRotateFor(1200, rotationUnits::deg, 100, velocityUnits::pct);
+    LeftDrive1.startRotateFor(-120, rotationUnits::deg, -10, velocityUnits::pct);
+    LeftDrive2.startRotateFor(-140, rotationUnits::deg, -10, velocityUnits::pct);
+    while (RightDrive1.isSpinning() || RightDrive2.isSpinning()) {}
     
-    LeftDrive1.startRotateFor(50, rotationUnits::deg, 100, velocityUnits::pct);
-    LeftDrive2.startRotateFor(50, rotationUnits::deg, 100, velocityUnits::pct);
-    while (LeftDrive1.isSpinning() || LeftDrive2.isSpinning()) {}
+    DriveBackwardForDistance(1000);
     
-    LiftLiftForDistance(-50, 100);
+    RightDrive1.startRotateFor(190, rotationUnits::deg, 100, velocityUnits::pct);
+    RightDrive2.startRotateFor(190, rotationUnits::deg, 100, velocityUnits::pct);
+    LeftDrive1.startRotateFor(-190, rotationUnits::deg, -100, velocityUnits::pct);
+    LeftDrive2.startRotateFor(-190, rotationUnits::deg, -100, velocityUnits::pct);
+    while (RightDrive1.isSpinning() || RightDrive2.isSpinning()) {}
     
-    vex::task::sleep(3000);
+    DriveBackwardForDistance(700);
     
-    DriveBackwardForDistance(60);
+    RightDrive1.startRotateFor(-100, rotationUnits::deg, 100, velocityUnits::pct);
+    RightDrive2.startRotateFor(-100, rotationUnits::deg, 100, velocityUnits::pct);
+    while (RightDrive1.isSpinning() || RightDrive2.isSpinning()) {}
+    
+    DriveBackwardForDistance(1800);
+    
 }
 
 //Driver Control
@@ -377,6 +427,29 @@ void usercontrol( void ) {
     else if (Controller1.ButtonUp.pressing() && (CapsRotation <= 270 || CapsRotation >= 610))
         CapFlipper.rotateTo(540, rotationUnits::deg, 75, velocityUnits::pct);
     
+    // Brake cap flipper
+    else
+        CapFlipper.stop(brakeType::hold);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+// Rear Cap Flipper ////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////      
+    //Get the caps rotation
+    int RearCapsRotation = RearCapFlipper.rotation(rotationUnits::deg);  
+      
+    //Rotate 180 degrees
+    if      (Controller1.ButtonL1.pressing() && RearCapsRotation <= 97) {
+        RearCapFlipper.startRotateTo(197, rotationUnits::deg, 100, velocityUnits::pct);
+    } else if (Controller1.ButtonL1.pressing() && RearCapsRotation >= 97) {
+        RightDrive1.stop();
+        LeftDrive1 .stop();
+        RightDrive2.stop();
+        LeftDrive2 .stop();
+        RearCapFlipper.startRotateTo(00,  rotationUnits::deg, 50, velocityUnits::pct);
+        while(RearCapFlipper.isSpinning()){}
+    }
+        
     // Brake cap flipper
     else
         CapFlipper.stop(brakeType::hold);
